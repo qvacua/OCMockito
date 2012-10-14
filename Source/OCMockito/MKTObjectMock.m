@@ -18,6 +18,8 @@
 
 @implementation MKTObjectMock
 
+@synthesize mockedClass;
+
 + (id)mockForClass:(Class)aClass
 {
     return [[[self alloc] initWithClass:aClass] autorelease];
