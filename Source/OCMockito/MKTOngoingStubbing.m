@@ -58,6 +58,12 @@
     return self;
 }
 
+- (MKTOngoingStubbing *)willReturnRange:(NSRange)value
+{
+    [invocationContainer addAnswer:[NSValue valueWithRange:value]];
+    return self;
+}
+
 #define DEFINE_RETURN_METHOD(type, typeName)                                        \
     - (MKTOngoingStubbing *)willReturn ## typeName:(type)value                      \
     {                                                                               \
