@@ -11,33 +11,29 @@
 #import <objc/runtime.h>
 
 
-@interface MKTProtocolMock ()
-{
-    Protocol *mockedProtocol;
-}
-@end
-
-
 @implementation MKTProtocolMock
+{
+    Protocol *_mockedProtocol;
+}
 
 + (id)mockForProtocol:(Protocol *)aProtocol
 {
-    return [[[self alloc] initWithProtocol:aProtocol] autorelease];
+    return [[self alloc] initWithProtocol:aProtocol];
 }
 
 - (id)initWithProtocol:(Protocol *)aProtocol
 {
     self = [super init];
     if (self)
-        mockedProtocol = aProtocol;
+        _mockedProtocol = aProtocol;
     return self;
 }
 
 - (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector
 {
-    struct objc_method_description methodDescription = protocol_getMethodDescription(mockedProtocol, aSelector, YES, YES);
+    struct objc_method_description methodDescription = protocol_getMethodDescription(_mockedProtocol, aSelector, YES, YES);
     if (!methodDescription.name)
-        methodDescription = protocol_getMethodDescription(mockedProtocol, aSelector, NO, YES);
+        methodDescription = protocol_getMethodDescription(_mockedProtocol, aSelector, NO, YES);
     if (!methodDescription.name)
         return nil;
 	return [NSMethodSignature signatureWithObjCTypes:methodDescription.types];
@@ -48,7 +44,7 @@
 
 - (BOOL)conformsToProtocol:(Protocol *)aProtocol
 {
-    return protocol_conformsToProtocol(mockedProtocol, aProtocol);
+    return protocol_conformsToProtocol(_mockedProtocol, aProtocol);
 }
 
 - (BOOL)respondsToSelector:(SEL)aSelector

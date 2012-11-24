@@ -17,32 +17,21 @@
 #import "MKTVerificationMode.h"
 
 
-@interface MKTBaseMockObject ()
+@implementation MKTBaseMockObject
 {
     MKTMockingProgress *_mockingProgress;
     MKTInvocationContainer *_invocationContainer;
 }
-@end
-
-
-@implementation MKTBaseMockObject
 
 - (id)init
 {
     if (self)
     {
-        _mockingProgress = [[MKTMockingProgress sharedProgress] retain];
+        _mockingProgress = [MKTMockingProgress sharedProgress];
         _invocationContainer = [[MKTInvocationContainer alloc] initWithMockingProgress:_mockingProgress];
 
     }
     return self;
-}
-
-- (void)dealloc
-{
-    [_mockingProgress release];
-    [_invocationContainer release];
-    [super dealloc];
 }
 
 #define HANDLE_METHOD_RETURN_TYPE(type, typeName)                                            \
@@ -59,7 +48,7 @@
     {
         MKTInvocationMatcher *invocationMatcher = [_mockingProgress pullInvocationMatcher];
         if (!invocationMatcher)
-            invocationMatcher = [[[MKTInvocationMatcher alloc] init] autorelease];
+            invocationMatcher = [[MKTInvocationMatcher alloc] init];
         [invocationMatcher setExpectedInvocation:anInvocation];
         
         MKTVerificationData *data = [[MKTVerificationData alloc] init];
@@ -68,7 +57,6 @@
         [data setTestLocation:[_mockingProgress testLocation]];
         [verificationMode verifyData:data];
         
-        [data release];
         return;
     }
     
@@ -76,13 +64,12 @@
     MKTOngoingStubbing *ongoingStubbing = [[MKTOngoingStubbing alloc]
                                            initWithInvocationContainer:_invocationContainer];
     [_mockingProgress reportOngoingStubbing:ongoingStubbing];
-    [ongoingStubbing release];
     
     NSMethodSignature *methodSignature = [anInvocation methodSignature];
     const char* methodReturnType = [methodSignature methodReturnType];
     if (MKTTypeEncodingIsObjectOrClass(methodReturnType))
     {
-        id answer = [_invocationContainer findAnswerFor:anInvocation];
+        __unsafe_unretained id answer = [_invocationContainer findAnswerFor:anInvocation];
         [anInvocation setReturnValue:&answer];
     }
     HANDLE_METHOD_RETURN_TYPE(NSPoint, point)

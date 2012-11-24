@@ -21,18 +21,15 @@
 
 
 @interface MKTInvocationMatcher ()
-{
-    NSUInteger _numberOfArguments;
-    NSMutableArray *_argumentMatchers;
-}
-@property (nonatomic, retain) NSInvocation *expected;
-- (void)trueUpArgumentMatchersToCount:(NSUInteger)desiredCount;
+@property (nonatomic, strong) NSInvocation *expected;
 @end
 
 
 @implementation MKTInvocationMatcher
-
-@synthesize expected = _expected;
+{
+    NSUInteger _numberOfArguments;
+    NSMutableArray *_argumentMatchers;
+}
 
 - (id)init
 {
@@ -40,13 +37,6 @@
     if (self)
         _argumentMatchers = [[NSMutableArray alloc] init];
     return self;
-}
-
-- (void)dealloc
-{
-    [_expected release];
-    [_argumentMatchers release];
-    [super dealloc];
 }
 
 - (void)setMatcher:(id <HCMatcher>)matcher atIndex:(NSUInteger)argumentIndex
@@ -58,7 +48,7 @@
         [_argumentMatchers addObject:matcher];
     }
     else
-        [_argumentMatchers replaceObjectAtIndex:argumentIndex withObject:matcher];
+        _argumentMatchers[argumentIndex] = matcher;
 }
 
 - (NSUInteger)argumentMatchersCount
@@ -91,7 +81,7 @@
         const char *argumentType = [methodSignature getArgumentTypeAtIndex:argumentIndex];
         if (MKTTypeEncodingIsObjectOrClass(argumentType))
         {
-            id argument = nil;
+            __unsafe_unretained id argument = nil;
             [_expected getArgument:&argument atIndex:argumentIndex];
 
             id <HCMatcher> matcher;
@@ -107,10 +97,10 @@
 
 - (BOOL)argumentObjectClassMismatchInInvocation:(NSInvocation *)actual atIndex:(NSUInteger)index
 {
-    id actualArgument;
+    __unsafe_unretained id actualArgument;
     [actual getArgument:&actualArgument atIndex:index];
     
-    id <HCMatcher> matcher = [_argumentMatchers objectAtIndex:index];
+    id <HCMatcher> matcher = _argumentMatchers[index];
     return ![matcher matches:actualArgument];
 }
 
@@ -164,7 +154,7 @@
         type actualArgument;                                                                \
         [actual getArgument:&actualArgument atIndex:index];                                 \
                                                                                             \
-        id <HCMatcher> matcher = [_argumentMatchers objectAtIndex:index];                   \
+        id <HCMatcher> matcher = _argumentMatchers[index];                                  \
         if ([matcher isEqual:[NSNull null]])                                                \
         {                                                                                   \
             type expectedArgument;                                                          \
@@ -172,7 +162,7 @@
             return expectedArgument != actualArgument;                                      \
         }                                                                                   \
         else                                                                                \
-            return ![matcher matches:[NSNumber numberWith ## typeName :actualArgument]];    \
+            return ![matcher matches:@(actualArgument)];                                    \
     }
 
 DEFINE_ARGUMENT_MISMATCH_METHOD(char, Char)

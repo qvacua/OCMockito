@@ -11,27 +11,17 @@
 #import "MKTInvocationContainer.h"
 
 
-@interface MKTOngoingStubbing ()
+@implementation MKTOngoingStubbing
 {
     MKTInvocationContainer *_invocationContainer;
 }
-@end
-
-
-@implementation MKTOngoingStubbing
 
 - (id)initWithInvocationContainer:(MKTInvocationContainer *)invocationContainer
 {
     self = [super init];
     if (self)
-        _invocationContainer = [invocationContainer retain];
+        _invocationContainer = invocationContainer;
     return self;
-}
-
-- (void)dealloc
-{
-    [_invocationContainer release];
-    [super dealloc];
 }
 
 - (MKTOngoingStubbing *)willReturn:(id)object
@@ -52,11 +42,11 @@ DEFINE_VALUE_RETURN_METHOD(NSSize, Size)
 DEFINE_VALUE_RETURN_METHOD(NSRect, Rect)
 DEFINE_VALUE_RETURN_METHOD(NSRange, Range)
 
-#define DEFINE_RETURN_METHOD(type, typeName)                                        \
-    - (MKTOngoingStubbing *)willReturn ## typeName:(type)value                      \
-    {                                                                               \
-        [_invocationContainer addAnswer:[NSNumber numberWith ## typeName:value]];   \
-        return self;                                                                \
+#define DEFINE_RETURN_METHOD(type, typeName)                        \
+    - (MKTOngoingStubbing *)willReturn ## typeName:(type)value      \
+    {                                                               \
+        [_invocationContainer addAnswer:@(value)];                  \
+        return self;                                                \
     }
 
 DEFINE_RETURN_METHOD(BOOL, Bool)

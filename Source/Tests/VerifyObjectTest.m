@@ -20,7 +20,9 @@
     #import <OCHamcrestIOS/OCHamcrestIOS.h>
 #endif
 
-@interface TestObject : NSObject @end
+@interface TestObject : NSObject
+@end
+
 @implementation TestObject
 - (void)methodWithClassArg:(Class)class { return; }
 @end
@@ -47,7 +49,7 @@
 {
     // given
     NSMutableArray *mockArray = mock([NSMutableArray class]);
-    MockTestCase *mockTestCase = [[[MockTestCase alloc] init] autorelease];
+    MockTestCase *mockTestCase = [[MockTestCase alloc] init];
     
     // then
     [verifyWithMockTestCase(mockArray) removeAllObjects];
@@ -70,7 +72,7 @@
 {
     // given
     NSMutableArray *mockArray = mock([NSMutableArray class]);
-    MockTestCase *mockTestCase = [[[MockTestCase alloc] init] autorelease];
+    MockTestCase *mockTestCase = [[MockTestCase alloc] init];
     
     // when
     [mockArray removeObject:@"same"];
@@ -108,7 +110,7 @@
 {
     // given
     NSMutableArray *mockArray = mock([NSMutableArray class]);
-    MockTestCase *mockTestCase = [[[MockTestCase alloc] init] autorelease];
+    MockTestCase *mockTestCase = [[MockTestCase alloc] init];
     
     // when
     [mockArray removeObjectAtIndex:2];
@@ -127,7 +129,7 @@
     [mockArray removeObjectAtIndex:2];
     
     // then
-    [[verify(mockArray) withMatcher:greaterThan([NSNumber numberWithInt:1]) forArgument:0]
+    [[verify(mockArray) withMatcher:greaterThan(@1) forArgument:0]
      removeObjectAtIndex:0];
 }
 
@@ -140,14 +142,14 @@
     [mockArray removeObjectAtIndex:2];
     
     // then
-    [[verify(mockArray) withMatcher:greaterThan([NSNumber numberWithInt:1])] removeObjectAtIndex:0];
+    [[verify(mockArray) withMatcher:greaterThan(@1)] removeObjectAtIndex:0];
 }
 
 - (void)testVerifyTimesOneShouldFailForMethodNotInvoked
 {
     // given
     NSMutableArray *mockArray = mock([NSMutableArray class]);
-    MockTestCase *mockTestCase = [[[MockTestCase alloc] init] autorelease];
+    MockTestCase *mockTestCase = [[MockTestCase alloc] init];
     
     // then
     [verifyCountWithMockTestCase(mockArray, times(1)) removeAllObjects];
@@ -170,7 +172,7 @@
 {
     // given
     NSMutableArray *mockArray = mock([NSMutableArray class]);
-    MockTestCase *mockTestCase = [[[MockTestCase alloc] init] autorelease];
+    MockTestCase *mockTestCase = [[MockTestCase alloc] init];
     
     // when
     [mockArray removeAllObjects];
@@ -185,7 +187,7 @@
 {
     // given
     NSMutableArray *mockArray = mock([NSMutableArray class]);
-    MockTestCase *mockTestCase = [[[MockTestCase alloc] init] autorelease];
+    MockTestCase *mockTestCase = [[MockTestCase alloc] init];
     
     // when
     [mockArray removeAllObjects];
@@ -212,7 +214,7 @@
 {
     // given
     NSMutableArray *mockArray = mock([NSMutableArray class]);
-    MockTestCase *mockTestCase = [[[MockTestCase alloc] init] autorelease];
+    MockTestCase *mockTestCase = [[MockTestCase alloc] init];
     
     // when
     [mockArray removeAllObjects];
@@ -228,7 +230,7 @@
 {
     // given
     NSMutableArray *mockArray = mock([NSMutableArray class]);
-    MockTestCase *mockTestCase = [[[MockTestCase alloc] init] autorelease];
+    MockTestCase *mockTestCase = [[MockTestCase alloc] init];
     
     // then
     [verifyCountWithMockTestCase(mockArray, times(1)) removeAllObjects];
@@ -240,7 +242,7 @@
 {
     // given
     NSMutableArray *mockArray = mock([NSMutableArray class]);
-    MockTestCase *mockTestCase = [[[MockTestCase alloc] init] autorelease];
+    MockTestCase *mockTestCase = [[MockTestCase alloc] init];
     
     // when
     [mockArray removeAllObjects];
@@ -264,7 +266,7 @@
 {
     // given
     NSMutableArray *mockArray = mock([NSMutableArray class]);
-    MockTestCase *mockTestCase = [[[MockTestCase alloc] init] autorelease];
+    MockTestCase *mockTestCase = [[MockTestCase alloc] init];
     
     // when
     [mockArray removeAllObjects];
@@ -277,7 +279,7 @@
 - (void)testVerifyWithNilShouldGiveError
 {
     // given
-    MockTestCase *mockTestCase = [[[MockTestCase alloc] init] autorelease];
+    MockTestCase *mockTestCase = [[MockTestCase alloc] init];
     
     // then
     [verifyWithMockTestCase(nil) removeAllObjects];
@@ -288,7 +290,7 @@
 - (void)testVerifyCountWithNilShouldGiveError
 {
     // given
-    MockTestCase *mockTestCase = [[[MockTestCase alloc] init] autorelease];
+    MockTestCase *mockTestCase = [[MockTestCase alloc] init];
     
     // then
     [verifyCountWithMockTestCase(nil, times(1)) removeAllObjects];
@@ -300,7 +302,7 @@
 {
     // given
     NSMutableArray *realArray = [NSMutableArray array];
-    MockTestCase *mockTestCase = [[[MockTestCase alloc] init] autorelease];
+    MockTestCase *mockTestCase = [[MockTestCase alloc] init];
     
     // then
     [verifyWithMockTestCase(realArray) removeAllObjects];
@@ -312,7 +314,7 @@
 {
     // given
     NSMutableArray *realArray = [NSMutableArray array];
-    MockTestCase *mockTestCase = [[[MockTestCase alloc] init] autorelease];
+    MockTestCase *mockTestCase = [[MockTestCase alloc] init];
     
     // then
     [verifyCountWithMockTestCase(realArray, times(1)) removeAllObjects];

@@ -24,18 +24,14 @@
 @end
 
 
-@interface MKTExactTimes ()
+@implementation MKTExactTimes
 {
     NSUInteger expectedCount;
 }
-@end
-
-
-@implementation MKTExactTimes
 
 + (id)timesWithCount:(NSUInteger)expectedNumberOfInvocations
 {
-    return [[[self alloc] initWithCount:expectedNumberOfInvocations] autorelease];
+    return [[self alloc] initWithCount:expectedNumberOfInvocations];
 }
 
 - (id)initWithCount:(NSUInteger)expectedNumberOfInvocations
@@ -61,8 +57,8 @@
     if (matchingCount != expectedCount)
     {
         NSString *plural = (expectedCount == 1) ? @"" : @"s";
-        NSString *description = [NSString stringWithFormat:@"Expected %d matching invocation%@, but received %d",
-                                 expectedCount, plural, matchingCount];
+        NSString *description = [NSString stringWithFormat:@"Expected %u matching invocation%@, but received %u",
+                                 (unsigned)expectedCount, plural, (unsigned)matchingCount];
         MKTFailTestLocation([data testLocation], description);
     }
 }

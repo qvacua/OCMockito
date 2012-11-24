@@ -11,32 +11,27 @@
 #import <objc/runtime.h>
 
 
-@interface MKTObjectAndProtocolMock ()
-{
-    Class mockedClass;
-}
-
-@end
-
 @implementation MKTObjectAndProtocolMock
+{
+    Class _mockedClass;
+}
 
 + (id)mockForClass:(Class)aClass protocol:(Protocol *)protocol
 {
-    return [[[self alloc] initWithClass:aClass protocol:protocol] autorelease];
+    return [[self alloc] initWithClass:aClass protocol:protocol];
 }
 
 - (id)initWithClass:(Class)aClass protocol:(Protocol *)protocol
 {
     self = [super initWithProtocol:protocol];
     if (self)
-        mockedClass = aClass;
+        _mockedClass = aClass;
     return self;
 }
 
-
 - (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector
 {
-    NSMethodSignature *signature = [mockedClass instanceMethodSignatureForSelector:aSelector];
+    NSMethodSignature *signature = [_mockedClass instanceMethodSignatureForSelector:aSelector];
     
     if (signature)
         return signature;
@@ -44,11 +39,12 @@
         return [super methodSignatureForSelector:aSelector];
 }
 
+
 #pragma mark NSObject protocol
 
 - (BOOL)respondsToSelector:(SEL)aSelector
 {
-    return [mockedClass instancesRespondToSelector:aSelector] ||
+    return [_mockedClass instancesRespondToSelector:aSelector] ||
            [super respondsToSelector:aSelector];
 }
 

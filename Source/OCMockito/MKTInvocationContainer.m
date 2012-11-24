@@ -8,22 +8,20 @@
 
 #import "MKTInvocationContainer.h"
 
+#import "MKTMockingProgress.h"
 #import "MKTStubbedInvocationMatcher.h"
 
 
 @interface MKTInvocationContainer ()
-{
-    MKTMockingProgress *_mockingProgress;
-    NSMutableArray *_stubbed;
-}
-@property (nonatomic, retain) MKTStubbedInvocationMatcher *invocationMatcherForStubbing;
+@property (nonatomic, strong) MKTStubbedInvocationMatcher *invocationMatcherForStubbing;
 @end
 
 
 @implementation MKTInvocationContainer
-
-@synthesize registeredInvocations = _registeredInvocations;
-@synthesize invocationMatcherForStubbing = _invocationMatcherForStubbing;
+{
+    MKTMockingProgress *_mockingProgress;
+    NSMutableArray *_stubbed;
+}
 
 - (id)initWithMockingProgress:(MKTMockingProgress *)mockingProgress
 {
@@ -31,21 +29,12 @@
     if (self)
     {
         _registeredInvocations = [[NSMutableArray alloc] init];
-        _mockingProgress = [mockingProgress retain];
+        _mockingProgress = mockingProgress;
         _stubbed = [[NSMutableArray alloc] init];
     }
     return self;
 }
 
-- (void)dealloc
-{
-    [_registeredInvocations release];
-    [_mockingProgress release];
-    [_invocationMatcherForStubbing release];
-    [_stubbed release];
-    
-    [super dealloc];
-}
 
 - (void)setInvocationForPotentialStubbing:(NSInvocation *)invocation
 {
@@ -55,7 +44,6 @@
     MKTStubbedInvocationMatcher *stubbedInvocationMatcher = [[MKTStubbedInvocationMatcher alloc] init];
     [stubbedInvocationMatcher setExpectedInvocation:invocation];
     [self setInvocationMatcherForStubbing:stubbedInvocationMatcher];
-    [stubbedInvocationMatcher release];
 }
 
 - (void)setMatcher:(id <HCMatcher>)matcher atIndex:(NSUInteger)argumentIndex
