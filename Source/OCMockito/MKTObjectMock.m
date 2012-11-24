@@ -14,7 +14,7 @@
     Class _mockedClass;
 }
 
-@synthesize mockedClass;
+@synthesize mockedClass = _mockedClass;
 
 + (id)mockForClass:(Class)aClass
 {

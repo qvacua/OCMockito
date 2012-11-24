@@ -14,7 +14,7 @@
  */
 @interface MKTObjectMock : MKTBaseMockObject
 
-@property (readonly) Class mockedClass;
+@property (readonly, atomic) Class mockedClass;
 
 + (id)mockForClass:(Class)aClass;
 - (id)initWithClass:(Class)aClass;
