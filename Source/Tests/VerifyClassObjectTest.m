@@ -25,13 +25,19 @@
 @end
 
 @implementation VerifyClassObjectTest
+{
+    Class mockStringClass;
+}
+
+- (void)setUp
+{
+    [super setUp];
+    mockStringClass = mockClass([NSString class]);
+}
 
 - (void)testInvokingClassMethodShouldPassVerify
 {
     // given
-    Class mockStringClass = mockClass([NSString class]);
-    
-    // when
     [mockStringClass string];
     
     // then
@@ -41,12 +47,13 @@
 - (void)testNotInvokingClassMethodShouldFailVerify
 {
     // given
-    Class mockStringClass = mockClass([NSString class]);
     MockTestCase *mockTestCase = [[MockTestCase alloc] init];
-    
-    // then
+
+    // when
     [verifyWithMockTestCase(mockStringClass) string];
-    assertThatUnsignedInteger([mockTestCase failureCount], is(equalToUnsignedInteger(1)));    
+
+    // then
+    assertThatUnsignedInteger([mockTestCase failureCount], is(equalToUnsignedInteger(1)));
 }
 
 @end

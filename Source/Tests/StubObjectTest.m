@@ -61,12 +61,18 @@
 @end
 
 @implementation StubObjectTest
-
-- (void)testStubbedMethoShouldReturnGivenObject
 {
-    // given
-    ReturningObject *mockObject = mock([ReturningObject class]);
-    
+    ReturningObject *mockObject;
+}
+
+- (void)setUp
+{
+    [super setUp];
+    mockObject = mock([ReturningObject class]);
+}
+
+- (void)testStubbedMethodShouldReturnGivenObject
+{
     // when
     [given([mockObject methodReturningObject]) willReturn:@"STUBBED"];
     
@@ -76,18 +82,12 @@
 
 - (void)testUnstubbedMethodReturningObjectShouldReturnNil
 {
-    // given
-    ReturningObject *mockObject = mock([ReturningObject class]);
-    
     // then
     assertThat([mockObject methodReturningObject], is(nilValue()));
 }
 
-- (void)testStubbedMethoShouldReturnGivenClass
+- (void)testStubbedMethodShouldReturnGivenClass
 {
-    // given
-    ReturningObject *mockObject = mock([ReturningObject class]);
-    
     // when
     [given([mockObject methodReturningClass]) willReturn:[NSString class]];
     
@@ -97,18 +97,11 @@
 
 - (void)testUnstubbedMethodReturningClassShouldReturnNull
 {
-    // given
-    ReturningObject *mockObject = mock([ReturningObject class]);
-    
-    // then
     assertThat([mockObject methodReturningClass], is(nilValue()));
 }
 
-- (void)testStubbedMethodSouldReturnOnMatchingArgument
+- (void)testStubbedMethodShouldReturnOnMatchingArgument
 {
-    // given
-    ReturningObject *mockObject = mock([ReturningObject class]);
-    
     // when
     [given([mockObject methodReturningClassWithClassArg:[NSString class]]) willReturn:[NSString class]];
     
@@ -119,9 +112,6 @@
 
 - (void)testStubsWithDifferentArgsShouldHaveDifferentReturnValues
 {
-    // given
-    ReturningObject *mockObject = mock([ReturningObject class]);
-    
     // when
     [given([mockObject methodReturningObjectWithArg:@"foo"]) willReturn:@"FOO"];
     [given([mockObject methodReturningObjectWithArg:@"bar"]) willReturn:@"BAR"];
@@ -132,9 +122,6 @@
 
 - (void)testStubShouldAcceptArgumentMatchers
 {
-    // given
-    ReturningObject *mockObject = mock([ReturningObject class]);
-    
     // when
     [given([mockObject methodReturningObjectWithArg:equalTo(@"foo")]) willReturn:@"FOO"];
     
@@ -144,9 +131,6 @@
 
 - (void)testStubShouldReturnValueForMatchingNumericArgument
 {
-    // given
-    ReturningObject *mockObject = mock([ReturningObject class]);
-    
     // when
     [given([mockObject methodReturningObjectWithIntArg:1]) willReturn:@"FOO"];
     [given([mockObject methodReturningObjectWithIntArg:2]) willReturn:@"BAR"];
@@ -157,9 +141,6 @@
 
 - (void)testStubShouldAcceptMatcherForNumericArgument
 {
-    // given
-    ReturningObject *mockObject = mock([ReturningObject class]);
-    
     // when
     [[given([mockObject methodReturningObjectWithIntArg:0])
       withMatcher:greaterThan(@1) forArgument:0] willReturn:@"FOO"];
@@ -170,9 +151,6 @@
 
 - (void)testShouldSupportShortcutForSpecifyingMatcherForFirstArgument
 {
-    // given
-    ReturningObject *mockObject = mock([ReturningObject class]);
-    
     // when
     [[given([mockObject methodReturningObjectWithIntArg:0])
       withMatcher:greaterThan(@1)] willReturn:@"FOO"];
@@ -183,9 +161,6 @@
 
 - (void)testStubbedMethodShouldReturnGivenBool
 {
-    // given
-    ReturningObject *mockObject = mock([ReturningObject class]);
-    
     // when
     [given([mockObject methodReturningBool]) willReturnBool:YES];
     
@@ -195,9 +170,6 @@
 
 - (void)testStubbedMethodShouldReturnGivenChar
 {
-    // given
-    ReturningObject *mockObject = mock([ReturningObject class]);
-    
     // when
     [given([mockObject methodReturningChar]) willReturnChar:'a'];
     
@@ -207,9 +179,6 @@
 
 - (void)testStubbedMethodShouldReturnGivenInt
 {
-    // given
-    ReturningObject *mockObject = mock([ReturningObject class]);
-    
     // when
     [given([mockObject methodReturningInt]) willReturnInt:42];
     
@@ -219,9 +188,6 @@
 
 - (void)testStubbedMethodShouldReturnGivenShort
 {
-    // given
-    ReturningObject *mockObject = mock([ReturningObject class]);
-    
     // when
     [given([mockObject methodReturningShort]) willReturnShort:42];
     
@@ -231,9 +197,6 @@
 
 - (void)testStubbedMethodShouldReturnGivenLong
 {
-    // given
-    ReturningObject *mockObject = mock([ReturningObject class]);
-    
     // when
     [given([mockObject methodReturningLong]) willReturnLong:42];
     
@@ -243,9 +206,6 @@
 
 - (void)testStubbedMethodShouldReturnGivenLongLong
 {
-    // given
-    ReturningObject *mockObject = mock([ReturningObject class]);
-    
     // when
     [given([mockObject methodReturningLongLong]) willReturnLongLong:42];
     
@@ -255,9 +215,6 @@
 
 - (void)testStubbedMethodShouldReturnGivenInteger
 {
-    // given
-    ReturningObject *mockObject = mock([ReturningObject class]);
-    
     // when
     [given([mockObject methodReturningInteger]) willReturnInteger:42];
     
@@ -267,9 +224,6 @@
 
 - (void)testStubbedMethodShouldReturnGivenUnsignedChar
 {
-    // given
-    ReturningObject *mockObject = mock([ReturningObject class]);
-    
     // when
     [given([mockObject methodReturningUnsignedChar]) willReturnUnsignedChar:'a'];
     
@@ -279,9 +233,6 @@
 
 - (void)testStubbedMethodShouldReturnGivenUnsignedInt
 {
-    // given
-    ReturningObject *mockObject = mock([ReturningObject class]);
-    
     // when
     [given([mockObject methodReturningUnsignedInt]) willReturnUnsignedInt:42];
     
@@ -291,9 +242,6 @@
 
 - (void)testStubbedMethodShouldReturnGivenUnsignedShort
 {
-    // given
-    ReturningObject *mockObject = mock([ReturningObject class]);
-    
     // when
     [given([mockObject methodReturningUnsignedShort]) willReturnUnsignedShort:42];
     
@@ -303,9 +251,6 @@
 
 - (void)testStubbedMethodShouldReturnGivenUnsignedLong
 {
-    // given
-    ReturningObject *mockObject = mock([ReturningObject class]);
-    
     // when
     [given([mockObject methodReturningUnsignedLong]) willReturnUnsignedLong:42];
     
@@ -315,9 +260,6 @@
 
 - (void)testStubbedMethodShouldReturnGivenUnsignedLongLong
 {
-    // given
-    ReturningObject *mockObject = mock([ReturningObject class]);
-    
     // when
     [given([mockObject methodReturningUnsignedLongLong]) willReturnUnsignedLongLong:42];
     
@@ -327,9 +269,6 @@
 
 - (void)testStubbedMethodShouldReturnGivenUnsignedInteger
 {
-    // given
-    ReturningObject *mockObject = mock([ReturningObject class]);
-    
     // when
     [given([mockObject methodReturningUnsignedInteger]) willReturnUnsignedInteger:42];
     
@@ -339,9 +278,6 @@
 
 - (void)testStubbedMethodShouldReturnGivenFloat
 {
-    // given
-    ReturningObject *mockObject = mock([ReturningObject class]);
-    
     // when
     [given([mockObject methodReturningFloat]) willReturnFloat:42.5];
     
@@ -351,9 +287,6 @@
 
 - (void)testStubbedMethodShouldReturnGivenDouble
 {
-    // given
-    ReturningObject *mockObject = mock([ReturningObject class]);
-    
     // when
     [given([mockObject methodReturningDouble]) willReturnDouble:42];
     
