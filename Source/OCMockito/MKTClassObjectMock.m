@@ -1,6 +1,6 @@
 //
 //  OCMockito - MKTClassObjectMock.m
-//  Copyright 2012 Jonathan M. Reid. See LICENSE.txt
+//  Copyright 2013 Jonathan M. Reid. See LICENSE.txt
 //
 //  Created by: David Hart
 //  Source: https://github.com/jonreid/OCMockito
@@ -25,6 +25,11 @@
     if (self)
         _mockedClass = aClass;
     return self;
+}
+
+- (NSString *)description
+{
+    return [@"mock class of " stringByAppendingString:NSStringFromClass(_mockedClass)];
 }
 
 - (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector

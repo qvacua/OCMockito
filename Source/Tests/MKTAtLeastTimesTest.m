@@ -1,6 +1,6 @@
 //
 //  OCMockito - MKTAtLeastTimesTest.m
-//  Copyright 2012 Jonathan M. Reid. See LICENSE.txt
+//  Copyright 2013 Jonathan M. Reid. See LICENSE.txt
 //  
 //  Created by Markus Gasser on 18.04.12.
 //  Source: https://github.com/jonreid/OCMockito
@@ -39,7 +39,7 @@
 {
     [super setUp];
     emptyData = [[MKTVerificationData alloc] init];
-    [emptyData setInvocations:[[MKTInvocationContainer alloc] initWithMockingProgress:nil]];
+    [emptyData setInvocations:[[MKTInvocationContainer alloc] init]];
     [emptyData setWanted:[[MKTInvocationMatcher alloc] init]];
     invocation = [NSInvocation invocationWithMethodSignature:[NSMethodSignature signatureWithObjCTypes:"v@:"]];
 }

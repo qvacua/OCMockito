@@ -1,6 +1,6 @@
 //
 //  OCMockito - MKTInvocationContainer.m
-//  Copyright 2012 Jonathan M. Reid. See LICENSE.txt
+//  Copyright 2013 Jonathan M. Reid. See LICENSE.txt
 //
 //  Created by: Jon Reid, http://qualitycoding.org/
 //  Source: https://github.com/jonreid/OCMockito
@@ -12,25 +12,21 @@
 #import "MKTStubbedInvocationMatcher.h"
 
 
-@interface MKTInvocationContainer ()
-@property (nonatomic, strong) MKTStubbedInvocationMatcher *invocationMatcherForStubbing;
-@end
-
-
 @implementation MKTInvocationContainer
 {
-    MKTMockingProgress *_mockingProgress;
+    MKTStubbedInvocationMatcher *_invocationForStubbing;
     NSMutableArray *_stubbed;
+    NSMutableArray *_answersForStubbing;
 }
 
-- (id)initWithMockingProgress:(MKTMockingProgress *)mockingProgress
+- (id)init
 {
     self = [super init];
     if (self)
     {
         _registeredInvocations = [[NSMutableArray alloc] init];
-        _mockingProgress = mockingProgress;
         _stubbed = [[NSMutableArray alloc] init];
+        _answersForStubbing = [[NSMutableArray  alloc] init];
     }
     return self;
 }
@@ -41,31 +37,48 @@
     [invocation retainArguments];
     [_registeredInvocations addObject:invocation];
     
-    MKTStubbedInvocationMatcher *stubbedInvocationMatcher = [[MKTStubbedInvocationMatcher alloc] init];
-    [stubbedInvocationMatcher setExpectedInvocation:invocation];
-    [self setInvocationMatcherForStubbing:stubbedInvocationMatcher];
+    MKTStubbedInvocationMatcher *s = [[MKTStubbedInvocationMatcher alloc] init];
+    [s setExpectedInvocation:invocation];
+    _invocationForStubbing = s;
 }
 
 - (void)setMatcher:(id <HCMatcher>)matcher atIndex:(NSUInteger)argumentIndex
 {
-    [_invocationMatcherForStubbing setMatcher:matcher atIndex:argumentIndex];
+    [_invocationForStubbing setMatcher:matcher atIndex:argumentIndex];
 }
 
 - (void)addAnswer:(id)answer
 {
     [_registeredInvocations removeLastObject];
-    
-    [_invocationMatcherForStubbing setAnswer:answer];
-    [_stubbed insertObject:_invocationMatcherForStubbing atIndex:0];
+
+    [_invocationForStubbing setAnswer:answer];
+    [_stubbed insertObject:_invocationForStubbing atIndex:0];
 }
 
-- (id)findAnswerFor:(NSInvocation *)invocation
+- (MKTStubbedInvocationMatcher *)findAnswerFor:(NSInvocation *)invocation
 {
-    for (MKTStubbedInvocationMatcher *stubbedInvocationMatcher in _stubbed)
-        if ([stubbedInvocationMatcher matches:invocation])
-            return [stubbedInvocationMatcher answer];
-    
+    for (MKTStubbedInvocationMatcher *s in _stubbed)
+        if ([s matches:invocation])
+            return s;
     return nil;
+}
+
+- (void)setAnswersForStubbing:(NSArray *)answers
+{
+    [_answersForStubbing addObjectsFromArray:answers];
+}
+
+- (BOOL)hasAnswersForStubbing
+{
+    return [_answersForStubbing count] != 0;
+}
+
+- (void)setMethodForStubbing:(MKTInvocationMatcher *)invocationMatcher
+{
+    _invocationForStubbing = [[MKTStubbedInvocationMatcher alloc] initCopyingInvocationMatcher:invocationMatcher];
+    for (id answer in _answersForStubbing)
+        [self addAnswer:answer];
+    [_answersForStubbing removeAllObjects];
 }
 
 @end

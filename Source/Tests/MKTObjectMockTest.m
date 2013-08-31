@@ -1,6 +1,6 @@
 //
 //  OCMockito - MKTObjectMockTest.m
-//  Copyright 2012 Jonathan M. Reid. See LICENSE.txt
+//  Copyright 2013 Jonathan M. Reid. See LICENSE.txt
 //
 //  Created by: Jon Reid, http://qualitycoding.org/
 //  Source: https://github.com/jonreid/OCMockito
@@ -9,7 +9,7 @@
 #define MOCKITO_SHORTHAND
 #import "OCMockito.h"
 
-	// Test support
+    // Test support
 #import <SenTestingKit/SenTestingKit.h>
 
 #define HC_SHORTHAND
@@ -33,6 +33,12 @@
     [super setUp];
     mockString = mock([NSString class]);
 }
+
+- (void)testDescription
+{
+    assertThat([mockString description], is(@"mock object of NSString"));
+}
+
 - (void)testMockShouldAnswerSameMethodSignatureForSelectorAsRealObject
 {
     // given

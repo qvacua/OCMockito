@@ -1,6 +1,6 @@
 //
 //  OCMockito - MKTProtocolMockTest.m
-//  Copyright 2012 Jonathan M. Reid. See LICENSE.txt
+//  Copyright 2013 Jonathan M. Reid. See LICENSE.txt
 //
 //  Created by: Jon Reid, http://qualitycoding.org/
 //  Source: https://github.com/jonreid/OCMockito
@@ -12,6 +12,7 @@
     // Test support
 #import <SenTestingKit/SenTestingKit.h>
 
+#define HC_SHORTHAND
 #if TARGET_OS_MAC
     #import <OCHamcrest/OCHamcrest.h>
 #else
@@ -77,6 +78,10 @@
     mockImplementer = mockProtocol(@protocol(TestingProtocol));
 }
 
+- (void)testDescription
+{
+    assertThat([mockImplementer description], is(@"mock implementer of TestingProtocol protocol"));
+}
 
 - (void)testMockShouldAnswerSameMethodSignatureForRequiredSelectorAsrealImplementer
 {
@@ -88,7 +93,7 @@
     NSMethodSignature *signature = [(id)mockImplementer methodSignatureForSelector:selector];
     
     // then
-    HC_assertThat(signature, HC_equalTo([realImplementer methodSignatureForSelector:selector]));
+    assertThat(signature, equalTo([realImplementer methodSignatureForSelector:selector]));
 }
 
 - (void)testMockShouldAnswerSameMethodSignatureForOptionalSelectorAsRealImplementer
@@ -101,7 +106,7 @@
     NSMethodSignature *signature = [(id)mockImplementer methodSignatureForSelector:selector];
     
     // then
-    HC_assertThat(signature, HC_equalTo([realImplementer methodSignatureForSelector:selector]));
+    assertThat(signature, equalTo([realImplementer methodSignatureForSelector:selector]));
 }
 
 - (void)testMethodSignatureForSelectorNotInProtocolShouldAnswerNil
@@ -113,7 +118,7 @@
     NSMethodSignature *signature = [(id)mockImplementer methodSignatureForSelector:selector];
     
     // then
-    HC_assertThat(signature, HC_nilValue());
+    assertThat(signature, is(nilValue()));
 }
 
 - (void)testMockShouldConformToItsOwnProtocol

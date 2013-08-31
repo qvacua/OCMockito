@@ -1,6 +1,6 @@
 //
 //  OCMockito - MKTInvocationMatcher.m
-//  Copyright 2012 Jonathan M. Reid. See LICENSE.txt
+//  Copyright 2013 Jonathan M. Reid. See LICENSE.txt
 //
 //  Created by: Jon Reid, http://qualitycoding.org/
 //  Source: https://github.com/jonreid/OCMockito
@@ -9,6 +9,7 @@
 #import "MKTInvocationMatcher.h"
 
 #import "MKTTypeEncoding.h"
+
 
 #define HC_SHORTHAND
 #if TARGET_OS_MAC
@@ -21,15 +22,10 @@
 
 
 @interface MKTInvocationMatcher ()
-@property (nonatomic, strong) NSInvocation *expected;
 @end
 
 
 @implementation MKTInvocationMatcher
-{
-    NSUInteger _numberOfArguments;
-    NSMutableArray *_argumentMatchers;
-}
 
 - (id)init
 {
@@ -48,7 +44,7 @@
         [_argumentMatchers addObject:matcher];
     }
     else
-        _argumentMatchers[argumentIndex] = matcher;
+        [_argumentMatchers replaceObjectAtIndex:argumentIndex withObject:matcher];
 }
 
 - (NSUInteger)argumentMatchersCount
@@ -68,7 +64,7 @@
 
 - (void)setExpectedInvocation:(NSInvocation *)expectedInvocation
 {
-    [self setExpected:expectedInvocation];
+    _expected = expectedInvocation;
     [_expected retainArguments];
     
     NSMethodSignature *methodSignature = [_expected methodSignature];

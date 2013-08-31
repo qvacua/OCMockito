@@ -1,6 +1,6 @@
 //
 //  OCMockito - MKTClassObjectMockTest.m
-//  Copyright 2012 Jonathan M. Reid. See LICENSE.txt
+//  Copyright 2013 Jonathan M. Reid. See LICENSE.txt
 //
 //  Created by: David Hart
 //  Source: https://github.com/jonreid/OCMockito
@@ -32,6 +32,11 @@
 {
     [super setUp];
     mockStringClass = mockClass([NSString class]);
+}
+
+- (void)testDescription
+{
+    assertThat([mockStringClass description], is(@"mock class of NSString"));
 }
 
 - (void)testMockShouldAnswerSameMethodSignatureForSelectorAsRealObject

@@ -1,6 +1,6 @@
 //
 //  OCMockito - MKTInvocationMatcher.h
-//  Copyright 2012 Jonathan M. Reid. See LICENSE.txt
+//  Copyright 2013 Jonathan M. Reid. See LICENSE.txt
 //
 //  Created by: Jon Reid, http://qualitycoding.org/
 //  Source: https://github.com/jonreid/OCMockito
@@ -12,7 +12,13 @@
 
 
 @interface MKTInvocationMatcher : NSObject
+{
+    NSInvocation *_expected;
+    NSUInteger _numberOfArguments;
+    NSMutableArray *_argumentMatchers;
+}
 
+- (id)init;
 - (void)setMatcher:(id <HCMatcher>)matcher atIndex:(NSUInteger)argumentIndex;
 - (NSUInteger)argumentMatchersCount;
 

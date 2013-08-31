@@ -1,6 +1,6 @@
 //
 //  OCMockito - MKTProtocolMock.m
-//  Copyright 2012 Jonathan M. Reid. See LICENSE.txt
+//  Copyright 2013 Jonathan M. Reid. See LICENSE.txt
 //
 //  Created by: Jon Reid, http://qualitycoding.org/
 //  Source: https://github.com/jonreid/OCMockito
@@ -12,9 +12,6 @@
 
 
 @implementation MKTProtocolMock
-{
-    Protocol *_mockedProtocol;
-}
 
 + (id)mockForProtocol:(Protocol *)aProtocol
 {
@@ -27,6 +24,12 @@
     if (self)
         _mockedProtocol = aProtocol;
     return self;
+}
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"mock implementer of %@ protocol",
+            NSStringFromProtocol(_mockedProtocol)];
 }
 
 - (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector

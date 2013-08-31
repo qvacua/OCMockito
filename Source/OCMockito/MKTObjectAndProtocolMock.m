@@ -1,6 +1,6 @@
 //
 //  OCMockito - MKTObjectAndProtocolMock.m
-//  Copyright 2012 Jonathan M. Reid. See LICENSE.txt
+//  Copyright 2013 Jonathan M. Reid. See LICENSE.txt
 //  
 //  Created by: Kevin Lundberg
 //  Source: https://github.com/jonreid/OCMockito
@@ -27,6 +27,12 @@
     if (self)
         _mockedClass = aClass;
     return self;
+}
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"mock object of %@ implementing %@ protocol",
+            NSStringFromClass(_mockedClass), NSStringFromProtocol(_mockedProtocol)];
 }
 
 - (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector
