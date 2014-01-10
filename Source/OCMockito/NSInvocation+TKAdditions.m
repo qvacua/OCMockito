@@ -137,6 +137,28 @@ NSArray *TKArrayArgumentsForInvocation(NSInvocation *invocation)
             [invocation getArgument:&arg atIndex:i];
             [args insertObject:[NSValue valueWithPointer:arg] atIndex:ai];
         }
+        #if TARGET_OS_MAC
+        else if (strcmp(argType, @encode(NSPoint)) == 0) {
+            NSPoint arg;
+            [invocation getArgument:&arg atIndex:i];
+            [args insertObject:[NSValue valueWithPoint:arg] atIndex:ai];
+        }
+        else if (strcmp(argType, @encode(NSSize)) == 0) {
+            NSSize arg;
+            [invocation getArgument:&arg atIndex:i];
+            [args insertObject:[NSValue valueWithSize:arg] atIndex:ai];
+        }
+        else if (strcmp(argType, @encode(NSRect)) == 0) {
+            NSRect arg;
+            [invocation getArgument:&arg atIndex:i];
+            [args insertObject:[NSValue valueWithRect:arg] atIndex:ai];
+        }
+        else if (strcmp(argType, @encode(NSRange)) == 0) {
+            NSRange arg;
+            [invocation getArgument:&arg atIndex:i];
+            [args insertObject:[NSValue valueWithRange:arg] atIndex:ai];
+        }
+        #endif
         else
         {
             NSCAssert1(NO, @"-- Unhandled type: %s", argType);
@@ -145,6 +167,20 @@ NSArray *TKArrayArgumentsForInvocation(NSInvocation *invocation)
     
     return args;
 }
+
+/**
+* #define DEFINE_VALUE_RETURN_METHOD(type, typeName)                              \
+    - (MKTOngoingStubbing *)willReturn ## typeName:(type)value                  \
+    {                                                                           \
+        [_invocationContainer addAnswer:[NSValue valueWith ## typeName:value]];  \
+        return self;                                                            \
+    }
+
+DEFINE_VALUE_RETURN_METHOD(NSPoint, Point)
+DEFINE_VALUE_RETURN_METHOD(NSSize, Size)
+DEFINE_VALUE_RETURN_METHOD(NSRect, Rect)
+DEFINE_VALUE_RETURN_METHOD(NSRange, Range)
+*/
 
 void MKTSetReturnValueForInvocation(NSInvocation *invocation, id returnValue)
 {
@@ -220,4 +256,22 @@ void MKTSetReturnValueForInvocation(NSInvocation *invocation, id returnValue)
         double value = [returnValue doubleValue];
         [invocation setReturnValue:&value];
     }
+#if TARGET_OS_MAC
+    else if (strcmp(returnType, @encode(NSPoint)) == 0) {
+        NSPoint value = [returnValue pointValue];
+        [invocation setReturnValue:&value];
+    }
+    else if (strcmp(returnType, @encode(NSSize)) == 0) {
+        NSSize value = [returnValue sizeValue];
+        [invocation setReturnValue:&value];
+    }
+    else if (strcmp(returnType, @encode(NSRect)) == 0) {
+        NSRect value = [returnValue rectValue];
+        [invocation setReturnValue:&value];
+    }
+    else if (strcmp(returnType, @encode(NSRange)) == 0) {
+        NSRange value = [returnValue rangeValue];
+        [invocation setReturnValue:&value];
+    }
+#endif
 }

@@ -120,6 +120,31 @@
     return self;
 }
 
+#if TARGET_OS_MAC
+- (MKTOngoingStubbing *)willReturnPoint:(NSPoint)value
+{
+    [_invocationContainer addAnswer:[NSValue valueWithPoint:value]];
+    return self;
+}
+
+- (MKTOngoingStubbing *)willReturnSize:(NSSize)value
+{
+    [_invocationContainer addAnswer:[NSValue valueWithSize:value]];
+    return self;
+}
+
+- (MKTOngoingStubbing *)willReturnRect:(NSRect)value
+{
+    [_invocationContainer addAnswer:[NSValue valueWithRect:value]];
+    return self;
+}
+
+- (MKTOngoingStubbing *)willReturnRange:(NSRange)value
+{
+    [_invocationContainer addAnswer:[NSValue valueWithRange:value]];
+    return self;
+}
+#endif
 
 #pragma mark MKTPrimitiveArgumentMatching
 

@@ -67,4 +67,11 @@
 /// Stubs given @c double as return value.
 - (MKTOngoingStubbing *)willReturnDouble:(double)value;
 
+#if TARGET_OS_MAC
+- (MKTOngoingStubbing *)willReturnPoint:(NSPoint)value;
+- (MKTOngoingStubbing *)willReturnSize:(NSSize)value;
+- (MKTOngoingStubbing *)willReturnRect:(NSRect)value;
+- (MKTOngoingStubbing *)willReturnRange:(NSRange)value;
+#endif
+
 @end
