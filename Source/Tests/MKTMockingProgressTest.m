@@ -6,20 +6,24 @@
 //  Source: https://github.com/jonreid/OCMockito
 //
 
-    // Class under test
+// System under test
 #import "MKTMockingProgress.h"
 
-    // Collaborators
+// Collaborators
 #import "MKTExactTimes.h"
 #import "MKTInvocationContainer.h"
 #import "MKTInvocationMatcher.h"
 #import "MKTOngoingStubbing.h"
 
-    // Test support
+// Test support
 #import <SenTestingKit/SenTestingKit.h>
 
 #define HC_SHORTHAND
-#import <OCHamcrestIOS/OCHamcrestIOS.h>
+#if TARGET_OS_MAC
+    #import <OCHamcrest/OCHamcrest.h>
+#else
+    #import <OCHamcrestIOS/OCHamcrestIOS.h>
+#endif
 
 
 @interface MKTMockingProgressTest : SenTestCase
@@ -42,112 +46,77 @@
     [super tearDown];
 }
 
-- (void)testPullOngoingStubbingWithoutStubbingReportedShouldReturnNil
+- (void)testPullOngoingStubbingWithoutStubbingReported_ShouldReturnNil
 {
     assertThat([mockingProgress pullOngoingStubbing], is(nilValue()));
 }
 
-- (void)testPullOngoingStubbingWithStubbingReportedShouldReturnStubbing
+- (void)testPullOngoingStubbingWithStubbingReported_ShouldReturnStubbing
 {
-    // given
     MKTInvocationContainer *invocationContainer = [[MKTInvocationContainer alloc] init];
     MKTOngoingStubbing *ongoingStubbing = [[MKTOngoingStubbing alloc]
                                            initWithInvocationContainer:invocationContainer];
     
-    // when
     [mockingProgress reportOngoingStubbing:ongoingStubbing];
-    
-    // then
     assertThat([mockingProgress pullOngoingStubbing], is(sameInstance(ongoingStubbing)));
 }
 
-- (void)testPullOngoingStubbingShouldClearCurrentStubbing
+- (void)testPullOngoingStubbing_ShouldClearCurrentStubbing
 {
-    // given
     MKTInvocationContainer *invocationContainer = [[MKTInvocationContainer alloc] init];
     MKTOngoingStubbing *ongoingStubbing = [[MKTOngoingStubbing alloc]
                                            initWithInvocationContainer:invocationContainer];
     
-    // when
     [mockingProgress reportOngoingStubbing:ongoingStubbing];
     [mockingProgress pullOngoingStubbing];
-    
-    // then
     assertThat([mockingProgress pullOngoingStubbing], is(nilValue()));
 }
 
-- (void)testPullVerificationModeWithoutVerificationStartedShouldReturnNil
+- (void)testPullVerificationModeWithoutVerificationStarted_ShouldReturnNil
 {
     assertThat([mockingProgress pullVerificationMode], is(nilValue()));
 }
 
-- (void)testPullVerificationModeWithVerificationStartedShouldReturnMode
+- (void)testPullVerificationModeWithVerificationStarted_ShouldReturnMode
 {
-    // given
-    id <MKTVerificationMode> mode = [MKTExactTimes timesWithCount:42];
-    
-    // when
+    id <MKTVerificationMode> mode = [[MKTExactTimes alloc] initWithCount:42];
     [mockingProgress verificationStarted:mode atLocation:MKTTestLocationMake(self, __FILE__, __LINE__)];
-    
-    // then
     assertThat([mockingProgress pullVerificationMode], is(sameInstance(mode)));
 }
 
-- (void)testPullVerificationModeShouldClearCurrentVerification
+- (void)testPullVerificationMode_ShouldClearCurrentVerification
 {
-    // given
-    id <MKTVerificationMode> mode = [MKTExactTimes timesWithCount:42];
-    
-    // when
+    id <MKTVerificationMode> mode = [[MKTExactTimes alloc] initWithCount:42];
     [mockingProgress verificationStarted:mode atLocation:MKTTestLocationMake(self, __FILE__, __LINE__)];
     [mockingProgress pullVerificationMode];
-    
-    // then
     assertThat([mockingProgress pullVerificationMode], is(nilValue()));
 }
 
-- (void)testPullInvocationMatcherWithoutSettingMatchersShouldBeNil
+- (void)testPullInvocationMatcherWithoutSettingMatchers_ShouldBeNil
 {
     assertThat([mockingProgress pullInvocationMatcher], is(nilValue()));
 }
 
-- (void)testPullInvocationMatcherAfterSetMatcherShouldHaveThoseMatchersForAllFunctionArguments
+- (void)testPullInvocationMatcherAfterSetMatcher_ShouldHaveThoseMatchersForAllFunctionArguments
 {
-    // given
     [mockingProgress setMatcher:equalTo(@"irrelevant") forArgument:1];
-    
-    // when
     MKTInvocationMatcher *invocationMatcher = [mockingProgress pullInvocationMatcher];
-    
-    // then
-    assertThatUnsignedInteger([invocationMatcher argumentMatchersCount], equalToUnsignedInteger(4));
-                                                        // 0:self, 1:_cmd, 2:argument0, 3:argument1
+    assertThatUnsignedInteger([invocationMatcher argumentMatchersCount], is(equalTo(@2)));
 }
 
-- (void)testPullInvocationMatcherShouldClearCurrentMatcher
+- (void)testPullInvocationMatcher_ShouldClearCurrentMatcher
 {
-    // given
     [mockingProgress setMatcher:equalTo(@"irrelevant") forArgument:3];
-
-    // when
     [mockingProgress pullInvocationMatcher];
-    
-    // then
     assertThat([mockingProgress pullInvocationMatcher], is(nilValue()));
 }
 
-- (void)testMoreThanOneSetMatcherShouldAccumulate
+- (void)testMoreThanOneSetMatcher_ShouldAccumulate
 {
-    // given
     [mockingProgress setMatcher:equalTo(@"irrelevant") forArgument:1];
     [mockingProgress setMatcher:equalTo(@"irrelevant") forArgument:0];
-
-    // when
     MKTInvocationMatcher *invocationMatcher = [mockingProgress pullInvocationMatcher];
-    
-    // then
-    assertThatUnsignedInteger([invocationMatcher argumentMatchersCount], equalToUnsignedInteger(4));
-                                                        // 0:self, 1:_cmd, 2:argument0, 3:argument1
+    assertThatUnsignedInteger([invocationMatcher argumentMatchersCount], is(equalTo(@2)));
 }
 
 @end

@@ -10,13 +10,13 @@
 
 
 /**
-    Mock object of a given class.
+ Mock object of a given class.
  */
 @interface MKTObjectMock : MKTBaseMockObject
 
 @property (readonly, atomic) Class mockedClass;
 
-+ (id)mockForClass:(Class)aClass;
-- (id)initWithClass:(Class)aClass;
++ (instancetype)mockForClass:(Class)aClass;
+- (instancetype)initWithClass:(Class)aClass;
 
 @end

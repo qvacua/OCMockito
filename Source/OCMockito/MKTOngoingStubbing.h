@@ -13,11 +13,11 @@
 
 
 /**
-    Methods to invoke on @c given(methodCall) to return stubbed values.
+ Methods to invoke on @c given(methodCall) to return stubbed values.
  */
 @interface MKTOngoingStubbing : NSObject <MKTPrimitiveArgumentMatching>
 
-- (id)initWithInvocationContainer:(MKTInvocationContainer *)invocationContainer;
+- (instancetype)initWithInvocationContainer:(MKTInvocationContainer *)invocationContainer;
 
 /// Stubs given object as return value.
 - (MKTOngoingStubbing *)willReturn:(id)object;
@@ -78,5 +78,12 @@
 
 /// Stubs given @c double as return value.
 - (MKTOngoingStubbing *)willReturnDouble:(double)value;
+
+#if TARGET_OS_MAC
+- (MKTOngoingStubbing *)willReturnPoint:(NSPoint)value;
+- (MKTOngoingStubbing *)willReturnSize:(NSSize)value;
+- (MKTOngoingStubbing *)willReturnRect:(NSRect)value;
+- (MKTOngoingStubbing *)willReturnRange:(NSRange)value;
+#endif
 
 @end

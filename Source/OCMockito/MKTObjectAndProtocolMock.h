@@ -10,11 +10,11 @@
 
 
 /**
-    Mock object of a given class that also implements a given protocol.
+ Mock object of a given class that also implements a given protocol.
  */
 @interface MKTObjectAndProtocolMock : MKTProtocolMock
 
-+ (id)mockForClass:(Class)aClass protocol:(Protocol *)protocol;
-- (id)initWithClass:(Class)aClass protocol:(Protocol *)protocol;
++ (instancetype)mockForClass:(Class)aClass protocol:(Protocol *)protocol;
+- (instancetype)initWithClass:(Class)aClass protocol:(Protocol *)protocol;
 
 @end

@@ -17,12 +17,9 @@
 
 @property (nonatomic, strong, readonly) NSMutableArray *registeredInvocations;
 
-- (id)init;
+- (instancetype)init;
 - (void)setInvocationForPotentialStubbing:(NSInvocation *)invocation;
 - (void)setMatcher:(id <HCMatcher>)matcher atIndex:(NSUInteger)argumentIndex;
 - (void)addAnswer:(id)answer;
 - (MKTStubbedInvocationMatcher *)findAnswerFor:(NSInvocation *)invocation;
-- (void)setAnswersForStubbing:(NSArray *)answers;
-- (BOOL)hasAnswersForStubbing;
-- (void)setMethodForStubbing:(MKTInvocationMatcher *)invocationMatcher;
 @end

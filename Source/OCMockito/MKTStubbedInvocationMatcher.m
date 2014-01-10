@@ -7,21 +7,10 @@
 //
 
 #import "MKTInvocationMatcher.h"
+
+#import "MKTCapturingMatcher.h"
 #import "MKTStubbedInvocationMatcher.h"
 
 
 @implementation MKTStubbedInvocationMatcher
-
-- (id)initCopyingInvocationMatcher:(MKTInvocationMatcher *)other
-{
-    self = [super init];
-    if (self)
-    {
-        _expected = other->_expected;
-        _numberOfArguments = other->_numberOfArguments;
-        _argumentMatchers = [other->_argumentMatchers mutableCopy];
-    }
-    return self;
-}
-
 @end

@@ -8,7 +8,6 @@
 
 #import "MKTInvocationContainer.h"
 
-#import "MKTMockingProgress.h"
 #import "MKTStubbedInvocationMatcher.h"
 
 
@@ -16,17 +15,15 @@
 {
     MKTStubbedInvocationMatcher *_invocationForStubbing;
     NSMutableArray *_stubbed;
-    NSMutableArray *_answersForStubbing;
 }
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
     if (self)
     {
         _registeredInvocations = [[NSMutableArray alloc] init];
         _stubbed = [[NSMutableArray alloc] init];
-        _answersForStubbing = [[NSMutableArray  alloc] init];
     }
     return self;
 }
@@ -51,7 +48,7 @@
 {
     [_registeredInvocations removeLastObject];
 
-    [_invocationForStubbing setAnswer:answer];
+    _invocationForStubbing.answer = answer;
     [_stubbed insertObject:_invocationForStubbing atIndex:0];
 }
 
@@ -61,24 +58,6 @@
         if ([s matches:invocation])
             return s;
     return nil;
-}
-
-- (void)setAnswersForStubbing:(NSArray *)answers
-{
-    [_answersForStubbing addObjectsFromArray:answers];
-}
-
-- (BOOL)hasAnswersForStubbing
-{
-    return [_answersForStubbing count] != 0;
-}
-
-- (void)setMethodForStubbing:(MKTInvocationMatcher *)invocationMatcher
-{
-    _invocationForStubbing = [[MKTStubbedInvocationMatcher alloc] initCopyingInvocationMatcher:invocationMatcher];
-    for (id answer in _answersForStubbing)
-        [self addAnswer:answer];
-    [_answersForStubbing removeAllObjects];
 }
 
 @end

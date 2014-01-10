@@ -20,10 +20,9 @@
     MKTOngoingStubbing *_ongoingStubbing;
 }
 
-+ (id)sharedProgress
++ (instancetype)sharedProgress
 {
     static id sharedProgress = nil;
-    
     if (!sharedProgress)
         sharedProgress = [[self alloc] init];
     return sharedProgress;
@@ -63,7 +62,7 @@
 {
     if (!_invocationMatcher)
         _invocationMatcher = [[MKTInvocationMatcher alloc] init];
-    [_invocationMatcher setMatcher:matcher atIndex:index+2];
+    [_invocationMatcher setMatcher:matcher atIndex:index];
 }
 
 - (MKTInvocationMatcher *)pullInvocationMatcher

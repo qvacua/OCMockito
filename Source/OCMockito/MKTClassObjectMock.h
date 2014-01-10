@@ -12,11 +12,11 @@
 
 
 /**
-    Mock object of a given class object.
+ Mock object of a given class object.
  */
 @interface MKTClassObjectMock : MKTBaseMockObject
 
-+ (id)mockForClass:(Class)aClass;
-- (id)initWithClass:(Class)aClass;
++ (instancetype)mockForClass:(Class)aClass;
+- (instancetype)initWithClass:(Class)aClass;
 
 @end

@@ -13,9 +13,9 @@
 #import "MKTMockingProgress.h"
 #import "MKTOngoingStubbing.h"
 #import "MKTStubbedInvocationMatcher.h"
-#import "MKTTypeEncoding.h"
 #import "MKTVerificationData.h"
 #import "MKTVerificationMode.h"
+#import "NSInvocation+TKAdditions.h"
 
 
 @implementation MKTBaseMockObject
@@ -24,7 +24,7 @@
     MKTInvocationContainer *_invocationContainer;
 }
 
-- (id)init
+- (instancetype)init
 {
     if (self)
     {
@@ -36,12 +36,6 @@
 
 - (void)forwardInvocation:(NSInvocation *)invocation
 {
-    if ([_invocationContainer hasAnswersForStubbing])
-    {
-        MKTInvocationMatcher *invocationMatcher = [self matcherWithInvocation:invocation];
-        [_invocationContainer setMethodForStubbing:invocationMatcher];
-        return;
-    }
     if ([self handlingVerifyOfInvocation:invocation])
         return;
     [self prepareInvocationForStubbing:invocation];
@@ -60,6 +54,7 @@
 {
     MKTInvocationMatcher *invocationMatcher = [self matcherWithInvocation:invocation];
     MKTVerificationData *data = [self verificationDataWithMatcher:invocationMatcher];
+    [data captureArguments];
     [verificationMode verifyData:data];
 }
 
@@ -75,17 +70,16 @@
 - (MKTVerificationData *)verificationDataWithMatcher:(MKTInvocationMatcher *)invocationMatcher
 {
     MKTVerificationData *data = [[MKTVerificationData alloc] init];
-    [data setInvocations:_invocationContainer];
-    [data setWanted:invocationMatcher];
-    [data setTestLocation:[_mockingProgress testLocation]];
+    data.invocations = _invocationContainer;
+    data.wanted = invocationMatcher;
+    data.testLocation = _mockingProgress.testLocation;
     return data;
 }
 
 - (void)prepareInvocationForStubbing:(NSInvocation *)invocation
 {
     [_invocationContainer setInvocationForPotentialStubbing:invocation];
-    MKTOngoingStubbing *ongoingStubbing = [[MKTOngoingStubbing alloc]
-            initWithInvocationContainer:_invocationContainer];
+    MKTOngoingStubbing *ongoingStubbing = [[MKTOngoingStubbing alloc] initWithInvocationContainer:_invocationContainer];
     [_mockingProgress reportOngoingStubbing:ongoingStubbing];
 }
 
@@ -96,38 +90,9 @@
         [self useExistingAnswerInStub:stubbedInvocation forInvocation:invocation];
 }
 
-#define HANDLE_METHOD_RETURN_TYPE(type, typeName)               \
-    else if (strcmp(methodReturnType, @encode(type)) == 0)      \
-    {                                                           \
-        type answer = [[stub answer] typeName ## Value];        \
-        [invocation setReturnValue:&answer];                    \
-    }
-
 - (void)useExistingAnswerInStub:(MKTStubbedInvocationMatcher *)stub forInvocation:(NSInvocation *)invocation
 {
-    NSMethodSignature *methodSignature = [invocation methodSignature];
-    const char* methodReturnType = [methodSignature methodReturnType];
-    if (MKTTypeEncodingIsObjectOrClass(methodReturnType))
-    {
-        __unsafe_unretained id answer = [stub answer];
-        [invocation setReturnValue:&answer];
-    }
-    HANDLE_METHOD_RETURN_TYPE(NSPoint, point)
-    HANDLE_METHOD_RETURN_TYPE(NSSize, size)
-    HANDLE_METHOD_RETURN_TYPE(NSRect, rect)
-    HANDLE_METHOD_RETURN_TYPE(NSRange, range)
-    HANDLE_METHOD_RETURN_TYPE(char, char)
-    HANDLE_METHOD_RETURN_TYPE(int, int)
-    HANDLE_METHOD_RETURN_TYPE(short, short)
-    HANDLE_METHOD_RETURN_TYPE(long, long)
-    HANDLE_METHOD_RETURN_TYPE(long long, longLong)
-    HANDLE_METHOD_RETURN_TYPE(unsigned char, unsignedChar)
-    HANDLE_METHOD_RETURN_TYPE(unsigned int, unsignedInt)
-    HANDLE_METHOD_RETURN_TYPE(unsigned short, unsignedShort)
-    HANDLE_METHOD_RETURN_TYPE(unsigned long, unsignedLong)
-    HANDLE_METHOD_RETURN_TYPE(unsigned long long, unsignedLongLong)
-    HANDLE_METHOD_RETURN_TYPE(float, float)
-    HANDLE_METHOD_RETURN_TYPE(double, double)
+    MKTSetReturnValueForInvocation(invocation, stub.answer);
 }
 
 

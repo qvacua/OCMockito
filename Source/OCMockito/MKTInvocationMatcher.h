@@ -12,17 +12,16 @@
 
 
 @interface MKTInvocationMatcher : NSObject
-{
-    NSInvocation *_expected;
-    NSUInteger _numberOfArguments;
-    NSMutableArray *_argumentMatchers;
-}
 
-- (id)init;
-- (void)setMatcher:(id <HCMatcher>)matcher atIndex:(NSUInteger)argumentIndex;
+@property (nonatomic, strong) NSInvocation *expected;
+@property (nonatomic) NSUInteger numberOfArguments;
+@property (nonatomic, strong) NSMutableArray *argumentMatchers;
+
+- (instancetype)init;
+- (void)setMatcher:(id <HCMatcher>)matcher atIndex:(NSUInteger)index;
 - (NSUInteger)argumentMatchersCount;
-
 - (void)setExpectedInvocation:(NSInvocation *)expectedInvocation;
 - (BOOL)matches:(NSInvocation *)actual;
+- (void)captureArgumentsFromInvocations:(NSArray *)invocations;
 
 @end

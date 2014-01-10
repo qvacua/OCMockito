@@ -16,7 +16,7 @@
     MKTInvocationContainer *_invocationContainer;
 }
 
-- (id)initWithInvocationContainer:(MKTInvocationContainer *)invocationContainer
+- (instancetype)initWithInvocationContainer:(MKTInvocationContainer *)invocationContainer
 {
     self = [super init];
     if (self)
@@ -30,47 +30,127 @@
     return self;
 }
 
-#define DEFINE_VALUE_RETURN_METHOD(type, typeName)                              \
-    - (MKTOngoingStubbing *)willReturn ## typeName:(type)value                  \
-    {                                                                           \
-        [_invocationContainer addAnswer:[NSValue valueWith ## typeName:value]];  \
-        return self;                                                            \
-    }
+- (MKTOngoingStubbing *)willReturnBool:(BOOL)value
+{
+    [_invocationContainer addAnswer:@(value)];
+    return self;
+}
 
-DEFINE_VALUE_RETURN_METHOD(NSPoint, Point)
-DEFINE_VALUE_RETURN_METHOD(NSSize, Size)
-DEFINE_VALUE_RETURN_METHOD(NSRect, Rect)
-DEFINE_VALUE_RETURN_METHOD(NSRange, Range)
+- (MKTOngoingStubbing *)willReturnChar:(char)value
+{
+    [_invocationContainer addAnswer:@(value)];
+    return self;
+}
 
-#define DEFINE_RETURN_METHOD(type, typeName)                        \
-    - (MKTOngoingStubbing *)willReturn ## typeName:(type)value      \
-    {                                                               \
-        [_invocationContainer addAnswer:@(value)];                  \
-        return self;                                                \
-    }
+- (MKTOngoingStubbing *)willReturnInt:(int)value
+{
+    [_invocationContainer addAnswer:@(value)];
+    return self;
+}
 
-DEFINE_RETURN_METHOD(BOOL, Bool)
-DEFINE_RETURN_METHOD(char, Char)
-DEFINE_RETURN_METHOD(int, Int)
-DEFINE_RETURN_METHOD(short, Short)
-DEFINE_RETURN_METHOD(long, Long)
-DEFINE_RETURN_METHOD(long long, LongLong)
-DEFINE_RETURN_METHOD(NSInteger, Integer)
-DEFINE_RETURN_METHOD(unsigned char, UnsignedChar)
-DEFINE_RETURN_METHOD(unsigned int, UnsignedInt)
-DEFINE_RETURN_METHOD(unsigned short, UnsignedShort)
-DEFINE_RETURN_METHOD(unsigned long, UnsignedLong)
-DEFINE_RETURN_METHOD(unsigned long long, UnsignedLongLong)
-DEFINE_RETURN_METHOD(NSUInteger, UnsignedInteger)
-DEFINE_RETURN_METHOD(float, Float)
-DEFINE_RETURN_METHOD(double, Double)
+- (MKTOngoingStubbing *)willReturnShort:(short)value
+{
+    [_invocationContainer addAnswer:@(value)];
+    return self;
+}
 
+- (MKTOngoingStubbing *)willReturnLong:(long)value
+{
+    [_invocationContainer addAnswer:@(value)];
+    return self;
+}
+
+- (MKTOngoingStubbing *)willReturnLongLong:(long long)value
+{
+    [_invocationContainer addAnswer:@(value)];
+    return self;
+}
+
+- (MKTOngoingStubbing *)willReturnInteger:(NSInteger)value
+{
+    [_invocationContainer addAnswer:@(value)];
+    return self;
+}
+
+- (MKTOngoingStubbing *)willReturnUnsignedChar:(unsigned char)value
+{
+    [_invocationContainer addAnswer:@(value)];
+    return self;
+}
+
+- (MKTOngoingStubbing *)willReturnUnsignedInt:(unsigned int)value
+{
+    [_invocationContainer addAnswer:@(value)];
+    return self;
+}
+
+- (MKTOngoingStubbing *)willReturnUnsignedShort:(unsigned short)value
+{
+    [_invocationContainer addAnswer:@(value)];
+    return self;
+}
+
+- (MKTOngoingStubbing *)willReturnUnsignedLong:(unsigned long)value
+{
+    [_invocationContainer addAnswer:@(value)];
+    return self;
+}
+
+- (MKTOngoingStubbing *)willReturnUnsignedLongLong:(unsigned long long)value
+{
+    [_invocationContainer addAnswer:@(value)];
+    return self;
+}
+
+- (MKTOngoingStubbing *)willReturnUnsignedInteger:(NSUInteger)value
+{
+    [_invocationContainer addAnswer:@(value)];
+    return self;
+}
+
+- (MKTOngoingStubbing *)willReturnFloat:(float)value
+{
+    [_invocationContainer addAnswer:@(value)];
+    return self;
+}
+
+- (MKTOngoingStubbing *)willReturnDouble:(double)value
+{
+    [_invocationContainer addAnswer:@(value)];
+    return self;
+}
+
+#if TARGET_OS_MAC
+- (MKTOngoingStubbing *)willReturnPoint:(NSPoint)value
+{
+    [_invocationContainer addAnswer:[NSValue valueWithPoint:value]];
+    return self;
+}
+
+- (MKTOngoingStubbing *)willReturnSize:(NSSize)value
+{
+    [_invocationContainer addAnswer:[NSValue valueWithSize:value]];
+    return self;
+}
+
+- (MKTOngoingStubbing *)willReturnRect:(NSRect)value
+{
+    [_invocationContainer addAnswer:[NSValue valueWithRect:value]];
+    return self;
+}
+
+- (MKTOngoingStubbing *)willReturnRange:(NSRange)value
+{
+    [_invocationContainer addAnswer:[NSValue valueWithRange:value]];
+    return self;
+}
+#endif
 
 #pragma mark MKTPrimitiveArgumentMatching
 
 - (id)withMatcher:(id <HCMatcher>)matcher forArgument:(NSUInteger)index
 {
-    [_invocationContainer setMatcher:matcher atIndex:index+2];
+    [_invocationContainer setMatcher:matcher atIndex:index];
     return self;
 }
 
